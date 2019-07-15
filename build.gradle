@@ -1,6 +1,6 @@
 
 plugins {
-    id "org.sonarqube" version "2.2"
+    id "org.sonarqube" version "2.6.1"
     id "org.xbib.gradle.plugin.asciidoctor" version "1.5.4.1.0"
     id "org.xbib.gradle.plugin.jflex" version "1.1.0"
     id "io.codearte.nexus-staging" version "0.7.0"
@@ -51,7 +51,6 @@ configurations {
 
 apply from: 'gradle/ext.gradle'
 apply from: 'gradle/publish.gradle'
-apply from: 'gradle/sonarqube.gradle'
 
 dependencies {
     compile "org.elasticsearch:elasticsearch:${project.property('elasticsearch.version')}"
