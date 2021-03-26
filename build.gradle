@@ -5,6 +5,7 @@ buildscript {
     repositories {
         mavenCentral()
         jcenter()
+        mavenLocal()
     }
     dependencies {
         classpath "org.elasticsearch.gradle:build-tools:${project.property('elasticsearch.version')}"
@@ -23,6 +24,12 @@ apply plugin: 'maven'
 apply plugin: 'elasticsearch.esplugin'
 apply plugin: 'org.xbib.gradle.plugin.jflex'
 apply plugin: 'elasticsearch.rest-resources'
+
+repositories {
+    mavenCentral()
+    jcenter()
+    mavenLocal()
+}
 
 ext {
     pluginName = 'bundle'
@@ -224,7 +231,7 @@ asciidoctor {
 // we use @Ignore
 //forbiddenApisTest.enabled = false
 //tasks.named("forbiddenPatterns").configure {
-//	exclude('**/*.txt', '**/*.brk', '**/*.fst', '**/*.tree', '**/*.nrm')
+//  exclude('**/*.txt', '**/*.brk', '**/*.fst', '**/*.tree', '**/*.nrm')
 //}
 //licenseHeaders.enabled = false
 //dependencyLicenses.enabled = false

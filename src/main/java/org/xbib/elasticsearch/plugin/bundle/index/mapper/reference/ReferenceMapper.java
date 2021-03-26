@@ -31,10 +31,11 @@ import org.elasticsearch.index.mapper.SimpleMappedFieldType;
 import org.elasticsearch.index.mapper.TextFieldMapper;
 import org.elasticsearch.index.mapper.TextSearchInfo;
 import org.elasticsearch.index.mapper.ValueFetcher;
-import org.elasticsearch.index.query.QueryShardContext;
+import org.elasticsearch.index.query.SearchExecutionContext;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -246,7 +247,7 @@ public class ReferenceMapper extends FieldMapper {
                 } else {
                     copyToContext = context.switchDoc(targetDoc);
                 }
-                Mapper mapper = copyToContext.docMapper().mappers().getMapper(field);
+                Mapper mapper = copyToContext.mappingLookup().getMapper(field);
                 if (mapper instanceof FieldMapper) {
                     FieldMapper fieldMapper = (FieldMapper) mapper;
                     fieldMapper.parse(copyToContext);
@@ -292,7 +293,7 @@ public class ReferenceMapper extends FieldMapper {
         }
 
         @Override
-        public ValueFetcher valueFetcher(QueryShardContext context, String format) {
+        public ValueFetcher valueFetcher(SearchExecutionContext context, String format) {
             throw new UnsupportedOperationException();
         }
 
@@ -318,7 +319,7 @@ public class ReferenceMapper extends FieldMapper {
         }
 
         @Override
-        public Query termQuery(Object value, QueryShardContext context) {
+        public Query termQuery(Object value, SearchExecutionContext context) {
             failIfNotIndexed();
             TermQuery query = new TermQuery(new Term(name(), indexedValueForSearch(value)));
             if ((Float.compare(boost(), 1f) == 0)) {
@@ -328,17 +329,14 @@ public class ReferenceMapper extends FieldMapper {
         }
 
         @Override
-        public Query termsQuery(List<?> values, QueryShardContext context) {
+        public Query termsQuery(Collection<?> values, SearchExecutionContext context) {
             failIfNotIndexed();
-            BytesRef[] bytesRefs = new BytesRef[values.size()];
-            for (int i = 0; i < bytesRefs.length; i++) {
-                bytesRefs[i] = indexedValueForSearch(values.get(i));
-            }
+            BytesRef[] bytesRefs = values.stream().map(this::indexedValueForSearch).toArray(BytesRef[]::new);
             return new TermInSetQuery(name(), bytesRefs);
         }
 
         @Override
-        public Query existsQuery(QueryShardContext context) {
+        public Query existsQuery(SearchExecutionContext context) {
             throw new UnsupportedOperationException();
         }
 
@@ -415,9 +413,9 @@ public class ReferenceMapper extends FieldMapper {
             try
             {
                 client = Optional.ofNullable(c)
-                                 .map(Mapper.TypeParser.ParserContext::queryShardContextSupplier)
+                                 .map(Mapper.TypeParser.ParserContext::searchExecutionContext)
                                  .map(Supplier::get)
-                                 .map(QueryShardContext::getClient)
+                                 .map(SearchExecutionContext::getClient)
                                  .orElse(null);
             }
             catch (Exception ignored)

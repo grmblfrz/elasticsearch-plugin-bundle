@@ -32,7 +32,7 @@ import org.elasticsearch.index.mapper.ParseContext;
 import org.elasticsearch.index.mapper.SimpleMappedFieldType;
 import org.elasticsearch.index.mapper.TextSearchInfo;
 import org.elasticsearch.index.mapper.ValueFetcher;
-import org.elasticsearch.index.query.QueryShardContext;
+import org.elasticsearch.index.query.SearchExecutionContext;
 import org.xbib.elasticsearch.plugin.bundle.common.langdetect.LangdetectService;
 import org.xbib.elasticsearch.plugin.bundle.common.langdetect.Language;
 import org.xbib.elasticsearch.plugin.bundle.common.langdetect.LanguageDetectionException;
@@ -40,6 +40,7 @@ import org.xbib.elasticsearch.plugin.bundle.common.langdetect.LanguageDetectionE
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -209,7 +210,7 @@ public class LangdetectMapper extends FieldMapper {
             } else {
                 copyToContext = context.switchDoc(targetDoc);
             }
-            Mapper mapper = copyToContext.docMapper().mappers().getMapper(field.toString());
+            Mapper mapper = copyToContext.mappingLookup().getMapper(field.toString());
             if (mapper instanceof FieldMapper) {
                 FieldMapper fieldMapper = (FieldMapper) mapper;
                 fieldMapper.parse(copyToContext);
@@ -446,7 +447,7 @@ public class LangdetectMapper extends FieldMapper {
         }
 
         @Override
-        public ValueFetcher valueFetcher(QueryShardContext context, String format) {
+        public ValueFetcher valueFetcher(SearchExecutionContext context, String format) {
             throw new UnsupportedOperationException();
         }
 
@@ -456,12 +457,12 @@ public class LangdetectMapper extends FieldMapper {
         }
 
         @Override
-        public Query existsQuery(QueryShardContext context) {
+        public Query existsQuery(SearchExecutionContext context) {
             return new TermQuery(new Term(FieldNamesFieldMapper.NAME, name()));
         }
 
         @Override
-        public Query termQuery(Object value, QueryShardContext context) {
+        public Query termQuery(Object value, SearchExecutionContext context) {
             failIfNotIndexed();
             Query query = new TermQuery(new Term(name(), indexedValueForSearch(value)));
             if (boost() != 1f) {
@@ -471,12 +472,9 @@ public class LangdetectMapper extends FieldMapper {
         }
 
         @Override
-        public Query termsQuery(List<?> values, QueryShardContext context) {
+        public Query termsQuery(Collection<?> values, SearchExecutionContext context) {
             failIfNotIndexed();
-            BytesRef[] bytesRefs = new BytesRef[values.size()];
-            for (int i = 0; i < bytesRefs.length; i++) {
-                bytesRefs[i] = indexedValueForSearch(values.get(i));
-            }
+            BytesRef[] bytesRefs = values.stream().map(this::indexedValueForSearch).toArray(BytesRef[]::new);
             return new TermInSetQuery(name(), bytesRefs);
         }
 
