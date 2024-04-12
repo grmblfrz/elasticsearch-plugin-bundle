@@ -21,6 +21,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import static org.apache.lucene.util.fst.FST.readMetadata;
+
 
 /**
  * This is a copy of org.apache.lucene.analysis.de.compounds.GermanCompoundSplitter from
@@ -45,7 +47,7 @@ public class FstDecompounder {
     public FstDecompounder(InputStream inputStream, List<String> glue) throws IOException {
         try {
             InputStreamDataInput input = new InputStreamDataInput(inputStream);
-            this.surfaceForms = new FST<>(input, input, NoOutputs.getSingleton());
+            this.surfaceForms = new FST<>(readMetadata(input, NoOutputs.getSingleton()), input);
             // set up glue morphemes
             this.glueMorphemes = createGlueMorphemes(glue != null && glue.size() > 0 ? glue :morphemes);
         } finally {
@@ -58,7 +60,7 @@ public class FstDecompounder {
             glue.set(i, new StringBuilder(glue.get(i)).reverse().toString());
         }
         Collections.sort(glue);
-        final FSTCompiler<Object> fstCompiler = new FSTCompiler<>(INPUT_TYPE.BYTE4, NoOutputs.getSingleton());
+        final FSTCompiler<Object> fstCompiler = new FSTCompiler.Builder<>(INPUT_TYPE.BYTE4, NoOutputs.getSingleton()).build();
         final Object nothing = NoOutputs.getSingleton().getNoOutput();
         IntsRefBuilder intsBuilder = new IntsRefBuilder();
         for (String morpheme : glue) {

@@ -67,7 +67,7 @@ public class FstCompiler {
         words.toArray(all);
         Arrays.sort(all, BytesRef::compareTo);
         final Object nothing = NoOutputs.getSingleton().getNoOutput();
-        final FSTCompiler<Object> fstCompiler = new FSTCompiler<>(INPUT_TYPE.BYTE4, NoOutputs.getSingleton());
+        final FSTCompiler<Object> fstCompiler = new FSTCompiler.Builder<>(INPUT_TYPE.BYTE4, NoOutputs.getSingleton()).build();
         final IntsRefBuilder intsRef = new IntsRefBuilder();
         for (BytesRef bytesRef : all) {
             intsRef.clear();

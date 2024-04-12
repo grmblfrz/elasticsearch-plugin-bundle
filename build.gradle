@@ -12,10 +12,8 @@ buildscript {
 }
 
 plugins {
-    id "org.sonarqube" version "3.4.0.2513"
-    id "io.codearte.nexus-staging" version "0.30.0"
-    id "org.xbib.gradle.plugin.jflex" version "1.6.0"
-    id "org.xbib.gradle.plugin.asciidoctor" version "2.5.2.1"
+    id "org.xbib.gradle.plugin.jflex" version "3.0.2"
+    id "org.xbib.gradle.plugin.asciidoctor" version "3.0.2"
 }
 
 apply plugin: 'java-library'
@@ -58,16 +56,16 @@ dependencies {
 }
 
 compileJava {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
     options.compilerArgs = [
             "-Xlint:-try"
     ]
 }
 
 compileTestJava {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
     options.compilerArgs = [
             "-Xlint:-cast,-deprecation,-rawtypes,-try,-unchecked",
             "-proc:none"
@@ -77,6 +75,7 @@ compileTestJava {
 javadoc {
     enabled = true
     options.addStringOption('Xdoclint:none', '-quiet')
+    dependsOn('generateJflex')
 }
 
 jar {
@@ -194,7 +193,6 @@ task xbibUpload(type: Upload) {
 nexusStaging {
     packageGroup = "org.xbib"
 }
-*/
 
 sonarqube {
     properties {
@@ -206,6 +204,7 @@ sonarqube {
         property "sonar.junit.reportsPath", "build/test-results/test/"
     }
 }
+*/
 
 asciidoctor {
     attributes toc: 'left',
@@ -229,3 +228,13 @@ thirdPartyAudit.enabled = false
 loggerUsageCheck.enabled = false
 testingConventions.enabled = false
 validateNebulaPom.enabled = false
+
+tasks.named('sourcesJar').configure {
+    dependsOn('generateJflex')
+}
+tasks.named('filepermissions').configure {
+    dependsOn('generateJflex')
+}
+tasks.named('forbiddenPatterns').configure {
+    dependsOn('generateJflex')
+}
