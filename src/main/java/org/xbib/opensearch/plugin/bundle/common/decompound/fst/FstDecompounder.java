@@ -67,7 +67,7 @@ public class FstDecompounder {
             fromUTF16ToUTF32(morpheme, intsBuilder);
             fstCompiler.add(intsBuilder.get(), nothing);
         }
-        return fstCompiler.compile();
+        return FST.fromFSTReader(fstCompiler.compile(), fstCompiler.getFSTReader());
     }
 
     public List<String> decompound(String word) {

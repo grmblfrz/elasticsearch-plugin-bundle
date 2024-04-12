@@ -74,7 +74,7 @@ public class FstCompiler {
             intsRef.copyUTF8Bytes(bytesRef);
             fstCompiler.add(intsRef.get(), nothing);
         }
-        final FST<Object> fst = fstCompiler.compile();
+        final FST<Object> fst = FST.fromFSTReader(fstCompiler.compile(), fstCompiler.getFSTReader());
         try (OutputStreamDataOutput out = new OutputStreamDataOutput(outputStream)) {
             fst.save(out, out);
         }
