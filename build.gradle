@@ -55,6 +55,12 @@ dependencies {
     testImplementation "org.opensearch.plugin:analysis-common:${project.property('opensearch.version')}"
 }
 
+java {
+  toolchain {
+    languageVersion.set(JavaLanguageVersion.of(21))
+  }
+}
+
 compileJava {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
