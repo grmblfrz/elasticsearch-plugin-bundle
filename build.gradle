@@ -44,9 +44,9 @@ sourceSets {
 }
 
 opensearchplugin {
-    description 'Plugin bundle for Opensearch'
-    name 'opensearch-plugin-bundle'
-    classname 'org.xbib.opensearch.plugin.bundle.BundlePlugin'
+    description = 'Plugin bundle for Opensearch'
+    name = 'opensearch-plugin-bundle'
+    classname = 'org.xbib.opensearch.plugin.bundle.BundlePlugin'
 }
 
 dependencies {
