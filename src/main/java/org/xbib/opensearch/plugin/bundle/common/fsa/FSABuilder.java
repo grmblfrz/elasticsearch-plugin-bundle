@@ -1,7 +1,5 @@
 package org.xbib.opensearch.plugin.bundle.common.fsa;
 
-import org.opensearch.common.io.Streams;
-
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Arrays;
@@ -253,10 +251,8 @@ public final class FSABuilder {
         this.size = inputStream.readInt();
         this.epsilon = inputStream.readInt();
         this.serialized = new byte[this.size];
-        try {
-            Streams.readFully(inputStream, serialized);
-        } finally {
-            inputStream.close();
+        try (inputStream) {
+           inputStream.readNBytes(this.serialized, 0, this.serialized.length);
         }
         final FSA fsa = new ConstantArcSizeFSA(Arrays.copyOf(this.serialized, this.size), this.epsilon);
         this.serialized = null;
@@ -487,13 +483,12 @@ public final class FSABuilder {
     /**
      * Copy <code>current</code> into an internal buffer.
      */
-    private boolean setPrevious(byte[] sequence, int start, int length) {
+    private void setPrevious(byte[] sequence, int start, int length) {
         if (previous == null || previous.length < length) {
             previous = new byte[length];
         }
         System.arraycopy(sequence, start, previous, 0, length);
         previousLength = length;
-        return true;
     }
 
     /**

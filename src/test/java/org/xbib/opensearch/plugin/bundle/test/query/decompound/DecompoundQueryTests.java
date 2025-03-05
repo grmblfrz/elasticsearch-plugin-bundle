@@ -64,7 +64,7 @@ public class DecompoundQueryTests extends OpenSearchIntegTestCase {
                     break;
                 }
             }
-            assertThat(pluginFound, is(true));
+            org.hamcrest.MatcherAssert.assertThat(pluginFound, is(true));
         }
     }
 
@@ -118,11 +118,11 @@ public class DecompoundQueryTests extends OpenSearchIntegTestCase {
     }
 
     private void assertHits(SearchHits hits, String... ids) {
-        assertThat(hits.getTotalHits().value, equalTo((long) ids.length));
+        org.hamcrest.MatcherAssert.assertThat(hits.getTotalHits().value, equalTo((long) ids.length));
         Set<String> hitIds = new HashSet<>();
         for (SearchHit hit : hits.getHits()) {
             hitIds.add(hit.getId());
         }
-        assertThat(hitIds, containsInAnyOrder(ids));
+        org.hamcrest.MatcherAssert.assertThat(hitIds, containsInAnyOrder(ids));
     }
 }

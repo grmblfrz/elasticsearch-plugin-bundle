@@ -30,21 +30,21 @@ public class IcuAnalysisTests extends OpenSearchTestCase {
                 new BundlePlugin(Settings.EMPTY));
 
         CharFilterFactory charFilterFactory = analysis.charFilter.get("icu_normalizer");
-        assertThat(charFilterFactory, instanceOf(IcuNormalizerCharFilterFactory.class));
+        org.hamcrest.MatcherAssert.assertThat(charFilterFactory, instanceOf(IcuNormalizerCharFilterFactory.class));
 
         TokenizerFactory tf = analysis.tokenizer.get("icu_tokenizer");
-        assertThat(tf, instanceOf(IcuTokenizerFactory.class));
+        org.hamcrest.MatcherAssert.assertThat(tf, instanceOf(IcuTokenizerFactory.class));
 
         TokenFilterFactory filterFactory = analysis.tokenFilter.get("icu_normalizer");
-        assertThat(filterFactory, instanceOf(IcuNormalizerTokenFilterFactory.class));
+        org.hamcrest.MatcherAssert.assertThat(filterFactory, instanceOf(IcuNormalizerTokenFilterFactory.class));
 
         filterFactory = analysis.tokenFilter.get("icu_folding");
-        assertThat(filterFactory, instanceOf(IcuFoldingTokenFilterFactory.class));
+        org.hamcrest.MatcherAssert.assertThat(filterFactory, instanceOf(IcuFoldingTokenFilterFactory.class));
 
         filterFactory = analysis.tokenFilter.get("icu_transform");
-        assertThat(filterFactory, instanceOf(IcuTransformTokenFilterFactory.class));
+        org.hamcrest.MatcherAssert.assertThat(filterFactory, instanceOf(IcuTransformTokenFilterFactory.class));
 
         Analyzer analyzer = analysis.indexAnalyzers.get( "icu_collation");
-        assertThat(analyzer, instanceOf(NamedAnalyzer.class));
+        org.hamcrest.MatcherAssert.assertThat(analyzer, instanceOf(NamedAnalyzer.class));
     }
 }

@@ -35,11 +35,7 @@ import org.opensearch.index.query.QueryShardContext;
 import org.opensearch.search.lookup.SearchLookup;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Reference field mapper.
@@ -173,13 +169,12 @@ public class ReferenceMapper extends FieldMapper {
                     logger.warn("ref doc does not exist: {}/{}/{}", index, type, content);
                 }
             } catch (Exception e) {
-                logger.error("error while getting ref doc " + index + "/" + type + "/"+ content + ": " + e.getMessage(), e);
+                logger.error("error while getting ref doc {}/{}/{}: {}", index, type, content, e.getMessage(), e);
             }
         } else {
             logger.warn("missing prerequisite: client={} index={} type={} fields={}",
                     client, index, type, fields);
         }
-        return;
     }
 
     @Override
@@ -237,8 +232,7 @@ public class ReferenceMapper extends FieldMapper {
                     copyToContext = context.switchDoc(targetDoc);
                 }
                 Mapper mapper = copyToContext.docMapper().mappers().getMapper(field);
-                if (mapper instanceof FieldMapper) {
-                    FieldMapper fieldMapper = (FieldMapper) mapper;
+                if (mapper instanceof FieldMapper fieldMapper) {
                     fieldMapper.parse(copyToContext);
                 } else {
                     throw new MapperParsingException("attempt to copy value to non-existing or non-field field [" + field + "]");
@@ -298,7 +292,7 @@ public class ReferenceMapper extends FieldMapper {
             for (int i = 0; i < bytesRefs.length; i++) {
                 bytesRefs[i] = indexedValueForSearch(values.get(i));
             }
-            return new TermInSetQuery(name(), bytesRefs);
+            return new TermInSetQuery(name(), Arrays.asList(bytesRefs));
         }
 
         @Override
@@ -308,12 +302,11 @@ public class ReferenceMapper extends FieldMapper {
 
     }
 
-    @SuppressWarnings({"rawtypes"})
     public static class Builder extends FieldMapper.Builder<Builder> {
 
-        private TextFieldMapper.Builder contentBuilder;
+        private final TextFieldMapper.Builder contentBuilder;
 
-        private Client client;
+        private final Client client;
 
         private String refIndex;
 
@@ -359,7 +352,7 @@ public class ReferenceMapper extends FieldMapper {
 
         @Override
         public ReferenceMapper build(BuilderContext context) {
-            FieldMapper contentMapper = (FieldMapper) contentBuilder.build(context);
+            FieldMapper contentMapper = contentBuilder.build(context);
             return new ReferenceMapper(name,
                     fieldType,
                     new ReferenceFieldType(buildFullName(context)),
@@ -382,7 +375,7 @@ public class ReferenceMapper extends FieldMapper {
         }
 
         @Override
-        @SuppressWarnings({"unchecked", "rawtypes"})
+        @SuppressWarnings({"rawtypes"})
         public Mapper.Builder parse(String name, Map<String, Object> node, ParserContext parserContext)
                 throws MapperParsingException {
             ReferenceMapper.Builder builder = new Builder(name, client);
