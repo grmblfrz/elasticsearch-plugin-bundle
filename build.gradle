@@ -49,10 +49,28 @@ opensearchplugin {
     classname = 'org.xbib.opensearch.plugin.bundle.BundlePlugin'
 }
 
+configurations {
+    agent
+}
+
+task prepareAgent(type: Copy) {
+    from(configurations.agent)
+    into "$buildDir/agent"
+}
+
 dependencies {
     implementation "com.ibm.icu:icu4j:${project.property('icu4j.version')}"
     implementation "org.xbib:standardnumber:${project.property('standardnumber.version')}"
     testImplementation "org.opensearch.plugin:analysis-common:${project.property('opensearch.version')}"
+    agent "org.opensearch:opensearch-agent-bootstrap:${project.property('opensearch.version')}"
+    agent "org.opensearch:opensearch-agent:${project.property('opensearch.version')}"
+    agent "net.bytebuddy:byte-buddy:${project.property('bytebuddy.version')}"
+}
+
+
+tasks.withType(Test) {
+    dependsOn prepareAgent
+    jvmArgs += ["-javaagent:" + project.layout.buildDirectory.file("agent/opensearch-agent-${project.property('opensearch.version')}.jar").get()]
 }
 
 java {

@@ -1,7 +1,7 @@
 package org.xbib.opensearch.plugin.bundle.action.langdetect;
 
 import org.opensearch.action.ActionRequestBuilder;
-import org.opensearch.client.OpenSearchClient;
+import org.opensearch.transport.client.OpenSearchClient;
 
 /**
  * Language detection request builder.

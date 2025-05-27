@@ -1,7 +1,7 @@
 package org.xbib.opensearch.plugin.bundle.test.index.analysis.german;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.opensearch.analysis.common.CommonAnalysisPlugin;
+import org.opensearch.analysis.common.CommonAnalysisModulePlugin;
 import org.opensearch.common.settings.Settings;
 import org.opensearch.core.index.Index;
 import org.opensearch.test.OpenSearchTestCase;
@@ -40,7 +40,7 @@ public class UnstemmedGermanNormalizationTests extends OpenSearchTokenStreamTest
                 .build();
         OpenSearchTestCase.TestAnalysis analysis = OpenSearchTestCase.createTestAnalysis(new Index("test", "_na_"),
                 settings,
-                new BundlePlugin(Settings.EMPTY), new CommonAnalysisPlugin());
+                new BundlePlugin(Settings.EMPTY), new CommonAnalysisModulePlugin());
         Analyzer analyzer = analysis.indexAnalyzers.get("default");
         assertTokenStreamContents(analyzer.tokenStream(null, new StringReader(source)), expected);
     }
@@ -61,7 +61,7 @@ public class UnstemmedGermanNormalizationTests extends OpenSearchTokenStreamTest
                 .build();
         OpenSearchTestCase.TestAnalysis analysis = OpenSearchTestCase.createTestAnalysis(new Index("test", "_na_"),
                 settings,
-                new BundlePlugin(Settings.EMPTY), new CommonAnalysisPlugin());
+                new BundlePlugin(Settings.EMPTY), new CommonAnalysisModulePlugin());
         Analyzer analyzer = analysis.indexAnalyzers.get("default");
         assertTokenStreamContents(analyzer.tokenStream(null, new StringReader(source)), expected);
     }
@@ -78,7 +78,7 @@ public class UnstemmedGermanNormalizationTests extends OpenSearchTokenStreamTest
                 .build();
         OpenSearchTestCase.TestAnalysis analysis = OpenSearchTestCase.createTestAnalysis(new Index("test", "_na_"),
                 settings,
-                new BundlePlugin(Settings.EMPTY), new CommonAnalysisPlugin());
+                new BundlePlugin(Settings.EMPTY), new CommonAnalysisModulePlugin());
         Analyzer analyzer = analysis.indexAnalyzers.get("default");
         assertTokenStreamContents(analyzer.tokenStream(null, new StringReader(source)), expected);
     }
@@ -95,7 +95,7 @@ public class UnstemmedGermanNormalizationTests extends OpenSearchTokenStreamTest
                 .build();
         OpenSearchTestCase.TestAnalysis analysis = OpenSearchTestCase.createTestAnalysis(new Index("test", "_na_"),
                 settings,
-                new BundlePlugin(Settings.EMPTY), new CommonAnalysisPlugin());
+                new BundlePlugin(Settings.EMPTY), new CommonAnalysisModulePlugin());
         Analyzer analyzer = analysis.indexAnalyzers.get("unstemmed");
         assertTokenStreamContents(analyzer.tokenStream("test", new StringReader(source)), expected);
     }
@@ -111,7 +111,7 @@ public class UnstemmedGermanNormalizationTests extends OpenSearchTokenStreamTest
                 .build();
         OpenSearchTestCase.TestAnalysis analysis = OpenSearchTestCase.createTestAnalysis(new Index("test", "_na_"),
                 settings,
-                new BundlePlugin(Settings.EMPTY), new CommonAnalysisPlugin());
+                new BundlePlugin(Settings.EMPTY), new CommonAnalysisModulePlugin());
         Analyzer analyzer = analysis.indexAnalyzers.get("unstemmed");
         assertTokenStreamContents(analyzer.tokenStream("test", new StringReader(source)), expected);
     }
@@ -131,7 +131,7 @@ public class UnstemmedGermanNormalizationTests extends OpenSearchTokenStreamTest
                 .build();
         OpenSearchTestCase.TestAnalysis analysis = OpenSearchTestCase.createTestAnalysis(new Index("test", "_na_"),
                 settings,
-                new BundlePlugin(Settings.EMPTY), new CommonAnalysisPlugin());
+                new BundlePlugin(Settings.EMPTY), new CommonAnalysisModulePlugin());
         Analyzer analyzer = analysis.indexAnalyzers.get("default");
         assertTokenStreamContents(analyzer.tokenStream(null, new StringReader(source)), expected);
     }

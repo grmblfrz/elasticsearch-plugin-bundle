@@ -6,7 +6,7 @@ import org.opensearch.action.admin.cluster.node.info.NodesInfoResponse;
 import org.opensearch.action.admin.cluster.node.info.PluginsAndModules;
 import org.opensearch.action.index.IndexRequestBuilder;
 import org.opensearch.action.search.SearchResponse;
-import org.opensearch.analysis.common.CommonAnalysisPlugin;
+import org.opensearch.analysis.common.CommonAnalysisModulePlugin;
 import org.opensearch.common.unit.TimeValue;
 import org.opensearch.common.xcontent.XContentType;
 import org.opensearch.index.query.QueryBuilders;
@@ -38,7 +38,7 @@ public class DecompoundQueryTests extends OpenSearchIntegTestCase {
 
     @Override
     protected Collection<Class<? extends Plugin>> nodePlugins() {
-        return Arrays.asList(CommonAnalysisPlugin.class, BundlePlugin.class);
+        return Arrays.asList(CommonAnalysisModulePlugin.class, BundlePlugin.class);
     }
 
     @Before
@@ -118,7 +118,7 @@ public class DecompoundQueryTests extends OpenSearchIntegTestCase {
     }
 
     private void assertHits(SearchHits hits, String... ids) {
-        org.hamcrest.MatcherAssert.assertThat(hits.getTotalHits().value, equalTo((long) ids.length));
+        org.hamcrest.MatcherAssert.assertThat(hits.getTotalHits().value(), equalTo((long) ids.length));
         Set<String> hitIds = new HashSet<>();
         for (SearchHit hit : hits.getHits()) {
             hitIds.add(hit.getId());

@@ -1,6 +1,6 @@
 package org.xbib.opensearch.plugin.bundle.common.reference;
 
-import org.opensearch.client.Client;
+import org.opensearch.transport.client.Client;
 import org.opensearch.common.inject.Inject;
 import org.opensearch.common.inject.Injector;
 import org.opensearch.common.lifecycle.AbstractLifecycleComponent;

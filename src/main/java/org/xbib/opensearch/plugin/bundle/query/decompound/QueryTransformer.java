@@ -51,10 +51,10 @@ public class QueryTransformer {
             boolean changed = false;
             BooleanQuery.Builder builder = new BooleanQuery.Builder();
             for (BooleanClause clause: booleanQuery.clauses()) {
-                Query newClauseQuery = queryTransformer.transform(clause.getQuery());
-                if (newClauseQuery != clause.getQuery()) {
+                Query newClauseQuery = queryTransformer.transform(clause.query());
+                if (newClauseQuery != clause.query()) {
                     changed = true;
-                    builder.add(new BooleanClause(newClauseQuery, clause.getOccur()));
+                    builder.add(new BooleanClause(newClauseQuery, clause.occur()));
                 } else {
                     builder.add(clause);
                 }

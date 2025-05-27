@@ -62,7 +62,7 @@ public class LangDetectBinaryTests extends OpenSearchSingleNodeTestCase {
                     .addStoredField("content.language")
                     .setTrackTotalHits(true);
             SearchResponse searchResponse = searchRequestBuilder.execute().actionGet();
-            assertEquals(1L, searchResponse.getHits().getTotalHits().value);
+            assertEquals(1L, searchResponse.getHits().getTotalHits().value());
             assertEquals("en", searchResponse.getHits().getAt(0).field("content.language").getValue());
         } finally {
             DeleteIndexRequestBuilder deleteIndexRequestBuilder =

@@ -1,7 +1,7 @@
 package org.xbib.opensearch.plugin.bundle.action.isbnformat;
 
 import org.opensearch.action.ActionRequestBuilder;
-import org.opensearch.client.OpenSearchClient;
+import org.opensearch.transport.client.OpenSearchClient;
 
 /**
  * ISBN format request builder.

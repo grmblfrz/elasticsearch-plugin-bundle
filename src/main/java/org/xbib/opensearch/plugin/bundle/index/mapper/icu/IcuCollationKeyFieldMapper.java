@@ -151,7 +151,7 @@ public class IcuCollationKeyFieldMapper extends FieldMapper {
 
         @Override
         public Query fuzzyQuery(Object value, Fuzziness fuzziness, int prefixLength, int maxExpansions,
-                                boolean transpositions, QueryShardContext context) {
+                                boolean transpositions, MultiTermQuery.RewriteMethod method, QueryShardContext context) {
             throw new UnsupportedOperationException();
         }
 

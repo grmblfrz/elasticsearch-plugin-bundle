@@ -11,7 +11,7 @@ import org.apache.lucene.search.TermInSetQuery;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.util.BytesRef;
 import org.opensearch.action.get.GetResponse;
-import org.opensearch.client.Client;
+import org.opensearch.transport.client.Client;
 import org.opensearch.common.geo.GeoPoint;
 import org.opensearch.common.lucene.BytesRefs;
 import org.opensearch.common.lucene.Lucene;

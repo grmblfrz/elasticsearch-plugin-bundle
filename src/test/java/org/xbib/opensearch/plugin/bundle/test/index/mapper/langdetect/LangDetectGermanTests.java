@@ -65,7 +65,7 @@ public class LangDetectGermanTests extends OpenSearchSingleNodeTestCase {
                     .addStoredField("content.language")
                     .setTrackScores(true);
             SearchResponse searchResponse = searchRequestBuilder.execute().actionGet();
-            assertEquals(1L, searchResponse.getHits().getTotalHits().value);
+            assertEquals(1L, searchResponse.getHits().getTotalHits().value());
             assertEquals("de", searchResponse.getHits().getAt(0).field("content.language").getValue());
         } finally {
             DeleteIndexRequestBuilder deleteIndexRequestBuilder =

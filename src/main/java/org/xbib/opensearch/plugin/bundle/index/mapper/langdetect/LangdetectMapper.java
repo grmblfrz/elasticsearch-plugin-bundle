@@ -37,12 +37,8 @@ import org.xbib.opensearch.plugin.bundle.common.langdetect.LanguageDetectionExce
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Language detection field mapper.
@@ -366,10 +362,11 @@ public class LangdetectMapper extends FieldMapper {
         @Override
         public Query termsQuery(List<?> values, QueryShardContext context) {
             failIfNotIndexed();
-            BytesRef[] bytesRefs = new BytesRef[values.size()];
-            for (int i = 0; i < bytesRefs.length; i++) {
-                bytesRefs[i] = indexedValueForSearch(values.get(i));
-            }
+            List<BytesRef> bytesRefs = values.stream().map(this::indexedValueForSearch).toList();
+            //List<BytesRef> bytesRefs = new ArrayList<>(values.size());
+            //for (int i = 0; i < values.size(); i++) {
+            //    bytesRefs.add(i, indexedValueForSearch(values.get(i)));
+            //}
             return new TermInSetQuery(name(), bytesRefs);
         }
 

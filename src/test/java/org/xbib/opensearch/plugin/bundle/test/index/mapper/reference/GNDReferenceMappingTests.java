@@ -7,7 +7,7 @@ import org.opensearch.action.search.SearchAction;
 import org.opensearch.action.search.SearchRequestBuilder;
 import org.opensearch.action.search.SearchResponse;
 import org.opensearch.action.support.WriteRequest;
-import org.opensearch.analysis.common.CommonAnalysisPlugin;
+import org.opensearch.analysis.common.CommonAnalysisModulePlugin;
 import org.opensearch.common.xcontent.XContentType;
 import org.opensearch.index.query.QueryBuilders;
 import org.opensearch.plugins.Plugin;
@@ -31,7 +31,7 @@ public class GNDReferenceMappingTests extends OpenSearchSingleNodeTestCase {
 
     @Override
     protected Collection<Class<? extends Plugin>> getPlugins() {
-        return Arrays.asList(BundlePlugin.class, CommonAnalysisPlugin.class);
+        return Arrays.asList(BundlePlugin.class, CommonAnalysisModulePlugin.class);
     }
 
     public void testGND() throws Exception {
@@ -71,19 +71,19 @@ public class GNDReferenceMappingTests extends OpenSearchSingleNodeTestCase {
             for (SearchHit hit : searchResponse.getHits().getHits()) {
                 logger.info("kurt tucholsky = {}", hit.getSourceAsMap());
             }
-            assertEquals(1, searchResponse.getHits().getTotalHits().value);
+            assertEquals(1, searchResponse.getHits().getTotalHits().value());
 
             searchRequestBuilder = new SearchRequestBuilder(client(), SearchAction.INSTANCE)
                     .setIndices("title")
                     .setQuery(QueryBuilders.matchPhraseQuery("bib.namePersonal", "Panter, Peter"))
                     .setTrackTotalHits(true);
             searchResponse = searchRequestBuilder.execute().actionGet();
-            logger.info("hits = {}", searchResponse.getHits().getTotalHits().value);
-            assertTrue(searchResponse.getHits().getTotalHits().value > 0);
+            logger.info("hits = {}", searchResponse.getHits().getTotalHits().value());
+            assertTrue(searchResponse.getHits().getTotalHits().value() > 0);
             for (SearchHit hit : searchResponse.getHits().getHits()) {
                 logger.info("peter panter = {}", hit.getSourceAsMap());
             }
-            assertEquals(1, searchResponse.getHits().getTotalHits().value);
+            assertEquals(1, searchResponse.getHits().getTotalHits().value());
 
             searchRequestBuilder = new SearchRequestBuilder(client(), SearchAction.INSTANCE)
                     .setIndices("title")
@@ -91,13 +91,13 @@ public class GNDReferenceMappingTests extends OpenSearchSingleNodeTestCase {
                     .setExplain(true)
                     .setTrackTotalHits(true);
             searchResponse = searchRequestBuilder.execute().actionGet();
-            logger.info("hits = {}", searchResponse.getHits().getTotalHits().value);
-            assertTrue(searchResponse.getHits().getTotalHits().value > 0);
+            logger.info("hits = {}", searchResponse.getHits().getTotalHits().value());
+            assertTrue(searchResponse.getHits().getTotalHits().value() > 0);
             for (SearchHit hit : searchResponse.getHits().getHits()) {
                 logger.info("schroeder = {}", hit.getSourceAsMap());
                 logger.info(hit.getExplanation().toString());
             }
-            assertEquals(1, searchResponse.getHits().getTotalHits().value);
+            assertEquals(1, searchResponse.getHits().getTotalHits().value());
 
             try {
                 client().admin().indices().prepareDelete("title", "gnd").execute().actionGet();

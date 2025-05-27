@@ -89,7 +89,7 @@ public class LangDetectActionTests extends OpenSearchSingleNodeTestCase {
                 .setQuery(QueryBuilders.termQuery("content", "en"))
                 .setTrackTotalHits(true)
                 .execute().actionGet();
-        assertEquals(1L, searchResponse.getHits().getTotalHits().value);
+        assertEquals(1L, searchResponse.getHits().getTotalHits().value());
         assertEquals("Oh, say can you see by the dawn`s early light, What so proudly we hailed at the twilight`s last gleaming?",
                 searchResponse.getHits().getAt(0).getSourceAsMap().get("content").toString());
 
@@ -97,7 +97,7 @@ public class LangDetectActionTests extends OpenSearchSingleNodeTestCase {
                 .setQuery(QueryBuilders.termQuery("content", "de"))
                 .setTrackTotalHits(true)
                 .execute().actionGet();
-        assertEquals(1L, searchResponse.getHits().getTotalHits().value);
+        assertEquals(1L, searchResponse.getHits().getTotalHits().value());
         assertEquals("Einigkeit und Recht und Freiheit für das deutsche Vaterland!",
                 searchResponse.getHits().getAt(0).getSourceAsMap().get("content").toString());
 
@@ -105,7 +105,7 @@ public class LangDetectActionTests extends OpenSearchSingleNodeTestCase {
                 .setQuery(QueryBuilders.termQuery("content", "fr"))
                 .setTrackTotalHits(true)
                 .execute().actionGet();
-        assertEquals(1L, searchResponse.getHits().getTotalHits().value);
+        assertEquals(1L, searchResponse.getHits().getTotalHits().value());
         assertEquals("Allons enfants de la Patrie, Le jour de gloire est arrivé!",
                 searchResponse.getHits().getAt(0).getSourceAsMap().get("content").toString());
     }
